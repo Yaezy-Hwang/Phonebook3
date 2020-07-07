@@ -12,10 +12,10 @@
 	<p>전화번호를 수정하려면<br>
 	    아래 항목을 수정하고 "수정" 버튼을 클릭하세요.</p>
 	<form action="${pageContext.request.contextPath}/phone/update" method="get"> 
-		이름(name): <input type="text" name="name" value="${vo.name}"><br>
-		핸드폰(hp): <input type="text" name="hp" value="${vo.hp}"><br>
-		회사(campany): <input type="text" name="company" value="${vo.company}"><br>
-		<input type="hidden" name="personId" value="${vo.personId}">
+		이름(name): <input type="text" name="name" value="${personMap.NAME}"><br>
+		핸드폰(hp): <input type="text" name="hp" value="${personMap.HP}"><br>
+		회사(campany): <input type="text" name="company" value="${personMap.COMPANY}"><br>
+		<input type="hidden" name="personId" value="${personMap.PERSON_ID}">
 	
 		<button type="submit">수정</button>
     </form> 

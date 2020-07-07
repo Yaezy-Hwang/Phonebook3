@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phonebook">
+
+	<resultMap id="resultMapPersonVo" type="com.javaex.vo.PersonVo">
+		<result column="person_id" property="personId" />
+		<result column="name" property="name" />
+		<result column="hp" property="hp" />
+		<result column="company" property="company" />
+	</resultMap>
+
+	<!-- 전체 리스트 가져오기 -->
+	<select id="selectList" resultMap="resultMapPersonVo">
+	    <![CDATA[
+	     select
+				person_id,
+				name,
+				hp,
+				company
+			from 
+				person
+			order by
+				person_id desc
+	    ]]>
+	</select>
+
+
+	<select id="selectById" parameterType="int" resultType = "com.javaex.vo.PersonVo">
+	    <![CDATA[
+	     select
+				person_id as personId,
+				name,
+				hp,
+				company
+			from 
+				person
+			where
+				person_id = #{personId}
+	    ]]>
+	</select>
+	
+		<select id="selectById2" parameterType="int" resultType = "Map">
+	    <![CDATA[
+	     select
+				person_id,
+				name,
+				hp,
+				company
+			from 
+				person
+			where
+				person_id = #{personId}
+	    ]]>
+	</select>
+
+	<insert id="insert" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			insert into person
+			values(seq_person_id.nextval, #{name}, #{hp}, #{company})
+		 ]]>
+	</insert>
+	
+	<insert id="insert2" parameterType="map">
+		<![CDATA[
+			insert into person
+			values(seq_person_id.nextval, #{name}, #{hp}, #{company})
+		 ]]>
+	</insert>
+	
+	<update id="update" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+	 		update person
+				set name = #{name},
+					hp = #{hp},
+					company = #{company}
+			where person_id = #{personId}
+		 ]]>
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from person
+			where person_id = #{personId}
+		 ]]>
+	</delete>
+	
+	
+
+	<!-- <select id="selectList" resultType="com.javaex.vo.PersonVo"> <![CDATA[ 
+		select person_id as personId, name, hp, company from person order by person_id 
+		desc ]]> </select> -->
+</mapper>

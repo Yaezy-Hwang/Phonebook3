@@ -1,7 +1,9 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,23 +17,24 @@ import com.javaex.vo.PersonVo;
 @Controller
 @RequestMapping("/phone") // 반복되는 주소 빼놓음
 public class PhoneController {
+	
+	@Autowired PhoneDao phoneDao;
 
-	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST }) // 사용할 주소
+	@RequestMapping(value= "/list", method = {RequestMethod.GET, RequestMethod.POST}) // 사용할 주소
 	public String list(Model model) {
 		System.out.println("/phone/list");
 
-		PhoneDao phonedao = new PhoneDao();
-		List<PersonVo> pList = phonedao.getPersonList();
+		List<PersonVo> pList = phoneDao.getPersonList();
 
 		model.addAttribute("pList", pList);
 
-		return "/WEB-INF/views/list.jsp"; // 포워드할 주소
+		return "list"; // 포워드할 주소
 	}
 
-	@RequestMapping(value = "/writeForm", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/writeForm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String writeForm() {
 
-		return "/WEB-INF/views/writeForm.jsp";
+		return "writeForm";
 	}
 
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
@@ -39,28 +42,48 @@ public class PhoneController {
 		System.out.println("/phone/write");
 		System.out.println(personVo.toString());
 
-		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.personInsert(personVo);
 
 		return "redirect: /phonebook3/phone/list";
 	}
 	
-	@RequestMapping("/updateForm")
+	@RequestMapping(value = "/write2", method = RequestMethod.GET)
+	public String write(@RequestParam("name") String name,
+						@RequestParam("hp") String hp,
+						@RequestParam("company") String company) {
+		
+		System.out.println("/phone/write2");
+		
+		phoneDao.personInsert2(name, hp, company);
+
+		return "redirect: /phonebook3/phone/list";
+	}
+	
+	@RequestMapping(value = "/updateForm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateForm(Model model, @RequestParam("personId") int personId) {
 		
-		PhoneDao phoneDao = new PhoneDao();
-		PersonVo vo = phoneDao.getPerson(personId);
+		System.out.println("/phone/updateForm");
 		
+		PersonVo vo = phoneDao.getPerson(personId);
 		model.addAttribute("vo", vo);
 		
-		return "/WEB-INF/views/updateForm.jsp";
+		return "updateForm";
+	}
+	
+	@RequestMapping(value = "/updateForm2", method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateForm2(Model model, @RequestParam("personId") int personId) {
+		
+		System.out.println("/phone/updateForm");
+		
+		Map<String, Object> personMap = phoneDao.getPerson2(personId);
+		model.addAttribute("personMap", personMap);
+		
+		return "updateForm2";
 	}
 	
 	@RequestMapping("/update")
 	public String update(@ModelAttribute PersonVo personVo) {
 		System.out.println("/phone/update");
-		
-		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.personUpdate(personVo);
 		
 		return "redirect: /phonebook3/phone/list";
@@ -68,10 +91,8 @@ public class PhoneController {
 	
 	@RequestMapping("/delete")
 	public String delete(@RequestParam("personId") int personId) {
-		
-		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.personDelete(personId);
-		
+
 		return "redirect: /phonebook3/phone/list";
 	}
 

@@ -11,14 +11,14 @@
 	    아래 항목을 기입하고 "등록"버튼을 클릭하세요.
 	</p>
 	
-	<form action="/phonebook3/phone/write" method="get">
+	<form action="${pageContext.request.contextPath}/phone/write2" method="get">
 	이름(name): <input type = "text" name="name" value=""><br>
 	핸드폰(hp): <input type = "text" name="hp" value=""><br>
 	회사(campany): <input type = "text" name="company" value=""><br>
 	<button type = "submit">등록</button>
 	</form>
 	
-	<p><a href ="/phonebook3/phone/list" >리스트로 돌아가기</a></p>
+	<p><a href ="${pageContext.request.contextPath}/phone/list" >리스트로 돌아가기</a></p>
 	
 </body>
 </html>
